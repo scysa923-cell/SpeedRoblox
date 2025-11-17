@@ -1,51 +1,50 @@
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local GuiService = game:GetService("GuiService")
+local UserInputService= game:GetService("UserInputService")
+local GuiService= game:GetService("GuiService")
 
 local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+local character= player.Character or player.CharacterAdded:Wait()
+local humanoid= character:WaitForChild("Humanoid")
 
 local function changeSpeed(newSpeed)
-    if humanoid then
-        humanoid.WalkSpeed = newSpeed
-        print("Скорость установлена: " .. newSpeed)
-    end
+if humanoid then
+humanoid.WalkSpeed = newSpeed
+print("Скорость установлена: " .. newSpeed)
+end
 end
 
 local screenGui = Instance.new("ScreenGui")
-local speedButton = Instance.new("TextButton")
-local resetButton = Instance.new("TextButton")
+local speedButton= Instance.new("TextButton")
+local resetButton= Instance.new("TextButton")
 
 screenGui.Parent = player.PlayerGui
 
 speedButton.Size = UDim2.new(0, 100, 0, 50)
-speedButton.Position = UDim2.new(0, 50, 0.8, 0)
-speedButton.Text = "SPEED"
-speedButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-speedButton.Parent = screenGui
-
+speedButton.Position= UDim2.new(0, 50, 0.8, 0)
+speedButton.Text= "SPEED"
+speedButton.BackgroundColor3= Color3.fromRGB(0, 170, 0)
+speedButton.TextColor3= Color3.fromRGB(255, 255, 255)
+speedButton.Parent= screenGui
 
 resetButton.Size = UDim2.new(0, 100, 0, 50)
-resetButton.Position = UDim2.new(0, 160, 0.8, 0)
-resetButton.Text = "NORMAL"
-resetButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-resetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-resetButton.Parent = screenGui
+resetButton.Position= UDim2.new(0, 160, 0.8, 0)
+resetButton.Text= "NORMAL"
+resetButton.BackgroundColor3= Color3.fromRGB(170, 0, 0)
+resetButton.TextColor3= Color3.fromRGB(255, 255, 255)
+resetButton.Parent= screenGui
 
 speedButton.MouseButton1Click:Connect(function()
-    changeSpeed(100)
+changeSpeed(100)
 end)
 
 resetButton.MouseButton1Click:Connect(function()
-    changeSpeed(16)
+changeSpeed(16)
 end)
 
 player.CharacterAdded:Connect(function(newCharacter)
-    character = newCharacter
-    humanoid = character:WaitForChild("Humanoid")
-    changeSpeed(16)
+character = newCharacter
+humanoid = character:WaitForChild("Humanoid")
+changeSpeed(16)
 end)
 
 changeSpeed(16)
