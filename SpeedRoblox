@@ -1,0 +1,37 @@
+-- Поместить в StarterPlayerScripts
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Функция для изменения скорости
+local function changeSpeed(newSpeed)
+    if humanoid then
+        humanoid.WalkSpeed = newSpeed
+        print("Скорость установлена: " .. newSpeed)
+    end
+end
+
+-- Обработка ввода с клавиатуры
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    -- Клавиша F для увеличения скорости до 100
+    if input.KeyCode == Enum.KeyCode.F then
+        changeSpeed(100)
+    
+    -- Клавиша R для сброса скорости до нормальной (16)
+    elseif input.KeyCode == Enum.KeyCode.R then
+        changeSpeed(16)
+    end
+end)
+
+-- Автоматическое применение при возрождении
+player.CharacterAdded:Connect(function(newCharacter)
+    character = newCharacter
+    humanoid = character:WaitForChild("Humanoid")
+    -- Можно добавить автоматическое применение скорости при возрождении
+    -- changeSpeed(100)
+end)
