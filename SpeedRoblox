@@ -1,9 +1,2 @@
-local Players = game:GetService("Players")
-local player= Players.LocalPlayer
-
-local function loadF3X()
-local f3xScript = game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-loadstring(f3xScript)()
-end
-
-loadF3X()
+local loadstring = loadstring or load
+local iy= loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
