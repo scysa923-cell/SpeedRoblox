@@ -1,2 +1,98 @@
-local loadstring = loadstring or load
-local iy= loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+local Speed = 30 -- 30 is Undetected
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Camera = workspace.Camera
+local meleeEvent = ReplicatedStorage:WaitForChild("meleeEvent")
+
+local Character, RootPart, ClonePart, Humanoid
+local function UpdateVars()
+    Character = LocalPlayer.Character or (LocalPlayer.CharacterAdded:wait() and LocalPlayer.Character)
+    if not Character:FindFirstChild("RRootPart") then
+        RootPart = Character:WaitForChild("HumanoidRootPart")
+        Humanoid = Character:WaitForChild("Humanoid")
+        ClonePart = RootPart:Clone()
+        ClonePart.Parent = Character
+        RootPart.Name = "RRootPart"
+        RootPart.RootJoint.Enabled = false
+        RootPart.Transparency = 0
+        local Highlight = Instance.new("Highlight", RootPart)
+    end
+end
+UpdateVars()
+
+getgenv().NoclipEnabled = false
+RunService.Heartbeat:Connect(function()
+    Character.Head.CanCollide = not NoclipEnabled
+    Character.Torso.CanCollide = not NoclipEnabled
+end)
+
+local function Teleport(TargetCFrame, Speed)
+    UpdateVars()
+    local Distance = ((RootPart.Position - TargetCFrame.Position) * Vector3.new(1,0,1)).Magnitude
+    local TimeToComplete = Distance / Speed
+    local tweenInfo = TweenInfo.new(TimeToComplete, Enum.EasingStyle.Linear)
+    local properties = {CFrame = TargetCFrame, Velocity = Vector3.zero}
+    local tween = TweenService:Create(RootPart, tweenInfo, properties)
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+local Armory = CFrame.new(830.3001098632812, 105.5, 2231.350341796875)
+local CrimBase = CFrame.new(-912.1004028320312, 99.93274688720703, 2045.9093017578125)
+local Nexus = CFrame.new(983.3499755859375, 104.69999694824219, 2315.14990234375)
+
+getgenv().Killing = false
+local function Kill(TargetCharacter)
+    UpdateVars()
+    getgenv().Killing = true
+    task.wait()
+    local TargetPlayer = Players:FindFirstChild(TargetCharacter.Name)
+    local TargetRoot = TargetCharacter.HumanoidRootPart
+    Teleport(ClonePart.CFrame * CFrame.new(0, -6.5, 0) * CFrame.Angles(math.rad(90),0,0), Speed * 3)
+    local Angle = CFrame.Angles(math.rad(90),0,0)
+    repeat task.wait()
+        local HiddenLocation
+        local TargetVel = TargetRoot.Velocity
+        if TargetVel.Y == 0 then
+            HiddenLocation = TargetRoot.CFrame * CFrame.new(0, -6.5, 0) * Angle
+        elseif TargetVel.Y <= -100 then
+            -- Do nothing because they are probably falling into void.
+            HiddenLocation = ClonePart.CFrame
+        else
+            HiddenLocation = TargetRoot.CFrame * CFrame.new(0, -12, 0) * Angle
+        end
+        Teleport(HiddenLocation, Speed)
+        meleeEvent:FireServer(TargetPlayer)
+    until TargetCharacter:WaitForChild("Humanoid").Health == 0
+    getgenv().Killing = false
+end
+
+local function getClonePart()
+    return ClonePart
+end
+
+task.spawn(function(getClonePart)
+    while task.wait() do
+        if getgenv().Killing == false then
+            local ClonePart = getClonePart()
+            Teleport(ClonePart.CFrame * CFrame.new(0, -6.5, 0) * CFrame.Angles(math.rad(90),0,0), Speed)
+        end
+    end
+end, getClonePart)
+
+Mouse.Button1Down:Connect(function()
+    if getgenv().Killing == false then
+        local Target = Mouse.Target
+        local Character = Target:FindFirstAncestorWhichIsA("Model")
+        local Humanoid = Character:FindFirstChild("Humanoid")
+        if Humanoid and Target.Parent.Name ~= LocalPlayer.Name then
+            Kill(Character)
+        end
+    end
+end)
