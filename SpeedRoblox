@@ -1,29 +1,9 @@
 local Players = game:GetService("Players")
 local player= Players.LocalPlayer
 
-local function giveF3X()
-local backpack = player:FindFirstChild("Backpack")
-if not backpack then return end
-
-local tool = Instance.new("Tool")
-tool.Name = "F3X"
-tool.ToolTip = "F3X Building Tools"
-tool.RequiresHandle = false
-
-local script = Instance.new("Script", tool)
-script.Source = "tool = script.Parent 
-local mouse = game:GetService('Players').LocalPlayer:GetMouse() 
-tool.Activated:Connect(function() 
-print('F3X Tool Activated') end)"
-tool.Parent = backpack
-print("F3X инструменты выданы!")
-
-
+local function loadF3X()
+local f3xScript = game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+loadstring(f3xScript)()
 end
 
-giveF3X()
-
-player.CharacterAdded:Connect(function()
-wait(2)
-giveF3X()
-end)
+loadF3X()
