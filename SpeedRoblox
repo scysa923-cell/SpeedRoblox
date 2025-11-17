@@ -11,8 +11,10 @@ tool.ToolTip = "F3X Building Tools"
 tool.RequiresHandle = false
 
 local script = Instance.new("Script", tool)
-script.Source = "tool = script.Parent local mouse = game:GetService('Players').LocalPlayer:GetMouse() tool.Activated:Connect(function() print('F3X Tool Activated') end)"
-
+script.Source = "tool = script.Parent 
+local mouse = game:GetService('Players').LocalPlayer:GetMouse() 
+tool.Activated:Connect(function() 
+print('F3X Tool Activated') end)"
 tool.Parent = backpack
 print("F3X инструменты выданы!")
 
